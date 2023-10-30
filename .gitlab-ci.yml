@@ -8,7 +8,7 @@ variables:
   SNYK_TOKEN: "7cdf926f-2c8b-47d3-bbe2-d8bfc41561fd"
 
 dependency_scanning:
-  image: node:latest
+  image: node:20
   stage: test
   script:
     # Install npm, snyk, and snyk-to-html
