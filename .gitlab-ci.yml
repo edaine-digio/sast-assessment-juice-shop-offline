@@ -6,8 +6,15 @@ variables:
 
 default:
   image: node:20
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
+sast:
+  stage: test
   artifacts:
-    reports: sast
+    reports:
+      sast: gl-sast-report.json
     paths:
       - gl-sast-report.json
 
