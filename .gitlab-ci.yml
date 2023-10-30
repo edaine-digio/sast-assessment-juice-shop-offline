@@ -7,8 +7,10 @@ variables:
   DAST_DISABLED: "true"
   SNYK_TOKEN: "7cdf926f-2c8b-47d3-bbe2-d8bfc41561fd"
 
-dependency_scanning:
+default:
   image: node:20
+
+test-snyk:
   stage: test
   script:
     # Install npm, snyk, and snyk-to-html
@@ -22,8 +24,15 @@ dependency_scanning:
     - snyk monitor --project-name=$CI_PROJECT_NAME
     - snyk test --json | snyk-to-html -o snyk_results.html
  
+testa-auditjs:
+  script:
+    - npm install -g auditjs
+    - npm install -g npm-audit-html
+    - auditjs ossi --json | npm-audit-html -o auditjs_results.html
+ 
   # Save report to artifacts
   artifacts:
     when: always
     paths: 
       - snyk_results.html
+      - auditjs_results.html
