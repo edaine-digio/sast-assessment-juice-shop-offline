@@ -31,8 +31,7 @@ test-snyk:
  
 testa-auditjs:
   script:
-    - npm install -g auditjs
-    - auditjs ossi --json 2>&1 | tee auditjs_results.json
+    - npx auditjs@beta ossi --json 2>&1 | tee auditjs_results.json
   # Save report to artifacts
   artifacts:
     when: always
