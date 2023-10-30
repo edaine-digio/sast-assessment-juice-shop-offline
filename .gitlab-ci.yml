@@ -1,10 +1,11 @@
 # include:
 #   - template: Auto-DevOps.gitlab-ci.yml
 
-# variables:
-#   SAST_EXCLUDED_PATHS: "frontend/src/assets/private/**"
-#   TEST_DISABLED: "true"
-#   DAST_DISABLED: "true"
+variables:
+  SAST_EXCLUDED_PATHS: "frontend/src/assets/private/**"
+  TEST_DISABLED: "true"
+  DAST_DISABLED: "true"
+  SNYK_TOKEN: "glpat-UwgnZTybySRip79J-43p"
 
 dependency_scanning:
   image: node:latest
