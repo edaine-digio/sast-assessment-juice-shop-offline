@@ -26,7 +26,8 @@ test-snyk:
     - snyk-to-html -i snyk_results.json -o snyk_results.html
   artifacts:
     when: always
-    paths: 
+    paths:
+      - snyk_results.json
       - snyk_results.html
  
 testa-auditjs:
