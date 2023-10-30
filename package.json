@@ -65,6 +65,7 @@
     "test:chromium": "cd frontend && ng test --watch=false --source-map=false --browsers=ChromiumHeadless && cd .. && npm run test:server",
     "test:server": "nyc --report-dir=./build/reports/coverage/server-tests mocha -r ts-node/register -r source-map-support/register --recursive test/server/**/*.ts",
     "test:api": "npm run frisby",
+    "report:snyk-to-html": "snyk-to-html",
     "rsn": "ts-node rsn/rsn.ts",
     "rsn:verbose": "ts-node rsn/rsn-verbose.ts",
     "rsn:update": "ts-node rsn/rsn-update.ts",
@@ -72,6 +73,7 @@
     "sbom": "npm run sbom:json && npm run sbom:xml",
     "sbom:json": "cyclonedx-npm --omit=dev --output-format=JSON --output-file=bom.json",
     "sbom:xml": " cyclonedx-npm --omit=dev --output-format=XML  --output-file=bom.xml",
+    "scan:snyk": "snyk test",
     "scan:auditjs": "auditjs ossi"
   },
   "jest": {
@@ -257,6 +259,8 @@
     "shelljs": "^0.8.4",
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
+    "snyk": "^1.1237.0",
+    "snyk-to-html": "^2.3.7",
     "socket.io-client": "^3.1.0",
     "source-map-support": "^0.5.19",
     "ts-jest": "^26.5.0",
