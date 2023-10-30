@@ -6,6 +6,10 @@ variables:
 
 default:
   image: node:20
+  artifacts:
+    reports: sast
+    paths:
+      - gl-sast-report.json
 
 test-snyk:
   stage: test
