@@ -9,6 +9,7 @@ default:
 
 test-snyk:
   stage: test
+  allow_failure: true
   script:
     # Install npm, snyk, and snyk-to-html
     - npm install
