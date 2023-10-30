@@ -20,7 +20,6 @@ sast:
 
 test-snyk:
   stage: test
-  allow_failure: true
   script:
     # Install npm, snyk, and snyk-to-html
     - npm install
@@ -29,7 +28,7 @@ test-snyk:
     - npx snyk --help
     - npx snyk auth $SNYK_TOKEN
     - npx snyk monitor --project-name=$CI_PROJECT_NAME
-    - npm run scan:snyk --json-file-output=snyk_results.json
+    - (npm run scan:snyk --json 2>&1 | tee snyk_results.json) || true
     - npm run report:snyk-to-html -i snyk_results.json -o snyk_results.html
   artifacts:
     when: always
