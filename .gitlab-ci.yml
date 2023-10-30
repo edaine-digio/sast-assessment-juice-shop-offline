@@ -1,6 +1,3 @@
-# include:
-#   - template: Auto-DevOps.gitlab-ci.yml
-
 variables:
   SAST_EXCLUDED_PATHS: "frontend/src/assets/private/**"
   TEST_DISABLED: "true"
@@ -17,9 +14,9 @@ test-snyk:
     - npm install
     - npm install -g npm@latest
     # Run snyk help, snyk auth, snyk monitor, snyk test to break build and out report
-    - snyk --help
-    - snyk auth $SNYK_TOKEN
-    - snyk monitor --project-name=$CI_PROJECT_NAME
+    - npx snyk --help
+    - npx snyk auth $SNYK_TOKEN
+    - npx snyk monitor --project-name=$CI_PROJECT_NAME
     - npm run scan:snyk --json 2>&1 | tee snyk_results.json
     - npm run report:snyk-to-html -i snyk_results.json -o snyk_results.html
   artifacts:
@@ -27,14 +24,17 @@ test-snyk:
     paths:
       - snyk_results.json
       - snyk_results.html
- 
+    expire_in: 1 week
+
 testa-auditjs:
+  stage: test
   script:
     - npm install
     - npm run scan:auditjs --json 2>&1 | tee auditjs_results.json
   # Save report to artifacts
   artifacts:
     when: always
-    paths: 
-      - auditjs_results.json    
- 
+    paths:
+      - auditjs_results.json
+    expire_in: 1 week
+
