@@ -17,22 +17,24 @@ test-snyk:
     - npm install
     - npm install -g npm@latest
     - npm install -g snyk
-    - npm install snyk-to-html -g
+    - npm install -g snyk-to-html
     # Run snyk help, snyk auth, snyk monitor, snyk test to break build and out report
     - snyk --help
     - snyk auth $SNYK_TOKEN
     - snyk monitor --project-name=$CI_PROJECT_NAME
     - snyk test --json | snyk-to-html -o snyk_results.html
- 
-testa-auditjs:
-  script:
-    - npm install -g auditjs
-    - npm install -g npm-audit-html
-    - auditjs ossi --json | npm-audit-html -o auditjs_results.html
- 
-  # Save report to artifacts
   artifacts:
     when: always
     paths: 
       - snyk_results.html
-      - auditjs_results.html
+ 
+testa-auditjs:
+  script:
+    - npm install -g auditjs
+    - auditjs ossi --json 2>&1 | tee auditjs_results.json
+  # Save report to artifacts
+  artifacts:
+    when: always
+    paths: 
+      - auditjs_results.json    
+ 
