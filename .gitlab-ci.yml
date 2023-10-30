@@ -5,7 +5,7 @@ variables:
   SAST_EXCLUDED_PATHS: "frontend/src/assets/private/**"
   TEST_DISABLED: "true"
   DAST_DISABLED: "true"
-  SNYK_TOKEN: "glpat-UwgnZTybySRip79J-43p"
+  SNYK_TOKEN: "7cdf926f-2c8b-47d3-bbe2-d8bfc41561fd"
 
 dependency_scanning:
   image: node:latest
