@@ -29,6 +29,7 @@ test-snyk:
     - npx snyk auth $SNYK_TOKEN
     - npx snyk monitor --project-name=$CI_PROJECT_NAME
     - export SNYK_TEST=$(npm run scan:snyk --json > snyk_results.json) || true
+    - echo "SNYK_TEST=$SNYK_TEST"
     - (npm run report:snyk-to-html -i snyk_results.json -o snyk_results.html) && $SNYK_TEST
   artifacts:
     when: always
