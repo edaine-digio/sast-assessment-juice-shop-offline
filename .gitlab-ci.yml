@@ -12,6 +12,8 @@ include:
 
 sast:
   stage: test
+  tags:
+    - sast-runner
   artifacts:
     reports:
       sast: gl-sast-report.json
@@ -22,6 +24,7 @@ test-snyk:
   stage: test
   script:
     # Install npm, snyk, and snyk-to-html
+    - free -m
     - npm install
     - npm install -g npm@latest
     # Run snyk help, snyk auth, snyk monitor, snyk test to break build and out report
