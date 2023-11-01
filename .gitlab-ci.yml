@@ -18,8 +18,7 @@ test-snyk:
     - npx snyk --help
     - npx snyk auth $SNYK_TOKEN
     - npx snyk monitor --project-name=$CI_PROJECT_NAME
-    - npm run scan:snyk -- --json | tee >(awk '/\{/, EOF' > snyk_results.json) 
-    - npm run report:snyk-to-html -- -i snyk_results.json -o snyk_results.html
+    - npm run scan:snyk -- --json | tee >(awk '/\{/, EOF' > snyk_results.json) >(awk '/\{/, EOF' | npm run report:snyk-to-html -- -o snyk_results.html)
   artifacts:
     when: always
     paths:
