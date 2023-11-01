@@ -24,14 +24,17 @@ test-snyk:
       - snyk_results.html
     expire_in: 1 week
 
-testa-auditjs:
+test-snyk-to-html:
   stage: test
+  dependencies:
+    - test-snyk
   script:
     - npm install
-    - npm run scan:auditjs --json 2>&1 | tee auditjs_results.json
-  # Save report to artifacts
+    - npm install -g npm@latest
+    - npm run report:snyk-to-html -- -i snyk_results.json -o snyk_results.html
   artifacts:
     when: always
     paths:
-      - auditjs_results.json
+      - snyk_results.html
     expire_in: 1 week
+
