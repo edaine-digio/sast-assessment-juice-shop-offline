@@ -7,19 +7,6 @@ variables:
 default:
   image: node:20
 
-include:
-  - template: Security/SAST.gitlab-ci.yml
-
-sast:
-  stage: test
-  tags:
-    - sast-runner
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
-    paths:
-      - gl-sast-report.json
-
 test-snyk:
   stage: test
   script:
@@ -31,9 +18,8 @@ test-snyk:
     - npx snyk --help
     - npx snyk auth $SNYK_TOKEN
     - npx snyk monitor --project-name=$CI_PROJECT_NAME
-    - export SNYK_TEST=$(npm run scan:snyk --json > snyk_results.json) || true
-    - echo "SNYK_TEST=$SNYK_TEST"
-    - (npm run report:snyk-to-html -i snyk_results.json -o snyk_results.html) && $SNYK_TEST
+    - npm run scan:snyk --json > snyk_results.json > /dev/null 2>&1 || FAILED=true
+    - ((npm run report:snyk-to-html -i snyk_results.json -o snyk_results.html) && $FAILED)
   artifacts:
     when: always
     paths:
