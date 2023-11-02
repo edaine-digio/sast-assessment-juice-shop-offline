@@ -16,18 +16,18 @@ test-snyk:
     # Run snyk auth, snyk monitor, snyk test to break build and out report
     - npx snyk auth $SNYK_TOKEN
     - npx snyk monitor --project-name=$CI_PROJECT_NAME
-    - npm run scan:snyk -- --json | tee >(awk '/\{/, EOF' > snyk_results.json) && npm run report:snyk-to-html -- -i snyk_results.json -o snyk_results.html
+    - npm run scan:snyk -- --json | tee >(awk '/\{/, EOF' > snyk_results.json)
   artifacts:
     when: always
     paths:
       - snyk_results.json
-      - snyk_results.html
     expire_in: 1 week
 
 test-snyk-to-html:
   stage: test
-  dependencies:
-    - test-snyk
+  needs:
+    - job: test-snyk
+      artifacts: true
   script:
     - npm install
     - npm install -g npm@latest
