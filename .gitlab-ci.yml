@@ -7,21 +7,33 @@ variables:
 default:
   image: node:20
 
-test-snyk:
-  stage: test
+build:
+  stage: build
   script:
     # Install npm, snyk, and snyk-to-html
     - npm install
     - npm install -g npm@latest
+
+test-snyk:
+  stage: test
+  needs:
+    - job: build
+      artifacts: true  
+  script:
     # Run snyk auth, snyk monitor, snyk test to break build and out report
     - npx snyk auth $SNYK_TOKEN
     - npx snyk monitor --project-name=$CI_PROJECT_NAME
-    - npm run scan:snyk -- --json | tee >(awk '/\{/, EOF' > snyk_results.json)
+    - set -o pipefail
+    - npm run scan:snyk -- --json | tee >(awk '/\{/, EOF' > snyk_results.json); echo "SNYK_FAILED=$?" > deploy.env
   artifacts:
     when: always
+    reports:
+      dotenv: deploy.env
     paths:
       - snyk_results.json
     expire_in: 1 week
+  allow_failure:
+    exit_codes: 1
 
 test-snyk-to-html:
   stage: test
@@ -29,12 +41,12 @@ test-snyk-to-html:
     - job: test-snyk
       artifacts: true
   script:
-    - npm install
-    - npm install -g npm@latest
-    - npm run report:snyk-to-html -- -i snyk_results.json -o snyk_results.html
+    - (npm run report:snyk-to-html -- -i snyk_results.json -o snyk_results.html -a) || $SNYK_FAILED
   artifacts:
     when: always
     paths:
       - snyk_results.html
     expire_in: 1 week
+  allow_failure:
+    exit_codes: 1
 

@@ -61,6 +61,10 @@ config/*.yml
 !config/unsafe.yml
 !config/tutorial.yml
 !config/oss.yml
+deploy.env
 
 # System Files
 .DS_Store
+
+# Reports
+snyk_results.*
