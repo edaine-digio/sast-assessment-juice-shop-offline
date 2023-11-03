@@ -6,7 +6,7 @@ variables:
 
 stages:
   - prep
-  - deploy
+  - test
 
 default:
   image: node:20
