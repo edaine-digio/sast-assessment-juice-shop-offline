@@ -25,8 +25,7 @@ prep:
 test-snyk:
   stage: test
   needs:
-    - job: build
-      artifacts: true
+    - job: prep
   script:
     # Run snyk auth, snyk monitor, snyk test to break build and out report
     - npx snyk auth $SNYK_TOKEN
