@@ -4,21 +4,29 @@ variables:
   DAST_DISABLED: "true"
   SNYK_TOKEN: "7cdf926f-2c8b-47d3-bbe2-d8bfc41561fd"
 
+stages:
+  - prep
+  - deploy
+
 default:
   image: node:20
 
-build:
-  stage: build
+prep:
+  stage: prep
   script:
     # Install npm, snyk, and snyk-to-html
     - npm install
     - npm install -g npm@latest
+  cache:
+    untracked: true
+    paths:
+      - node_modules/
 
 test-snyk:
   stage: test
   needs:
     - job: build
-      artifacts: true  
+      artifacts: true
   script:
     # Run snyk auth, snyk monitor, snyk test to break build and out report
     - npx snyk auth $SNYK_TOKEN
