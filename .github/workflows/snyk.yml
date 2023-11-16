@@ -4,13 +4,22 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
+      - name: ✅ Check out repository code with specific SHA
+        uses: actions/checkout@v3
+
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+
       - name: 🟢 Setup Node
         uses: actions/setup-node@v3
 
       - name: 📦🔗 Install packages
-        run: npm install --bypass-policy
+        run: |
+          npm install -g npm@latest
+          npm install --bypass-policy
 
       - name: 🔎 Run Snyk Code to check for vulnerabilities
+        id: snyk
         run: |
           npx snyk auth $SNYK_TOKEN
           set -o pipefail
@@ -19,12 +28,11 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: 📄 Generate report
-        if: always()
+        if: ${{ success() || steps.snyk.outcome == 'failure' }}
         run: |
           npm run report:snyk-to-html -- -i snyk_results.json -o snyk_results.html -a
 
       - name: 📂 Upload artifacts
-        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: snyk_results.html
