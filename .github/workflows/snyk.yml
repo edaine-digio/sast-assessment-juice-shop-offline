@@ -4,11 +4,29 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: snyk/actions/node@master
-      - name: Run Snyk Code to check for vulnerabilities
+      - name: 🟢 Setup Node
+        uses: actions/setup-node@v3
+
+      - name: 📦🔗 Install packages
+        run: npm install --bypass-policy
+
+      - name: 🔎 Run Snyk Code to check for vulnerabilities
         run: |
-          snyk auth $SNYK_TOKEN
-          snyk code test --json
+          npx snyk auth $SNYK_TOKEN
+          set -o pipefail
+          npm run scan:snyk -- --json | tee >(awk '/\{/, EOF' > snyk_results.json)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: 📄 Generate report
+        if: always()
+        run: |
+          npm run report:snyk-to-html -- -i snyk_results.json -o snyk_results.html -a
+
+      - name: 📂 Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: snyk_results.html
+          path: snyk_results.html
+          retention-days: 15
