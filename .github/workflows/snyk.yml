@@ -7,6 +7,8 @@ jobs:
       - uses: actions/checkout@master
       - uses: snyk/actions/node@master
       - name: Run Snyk Code to check for vulnerabilities
-        run: snyk code test
+        run: |
+          snyk auth $SNYK_TOKEN
+          snyk code test --json
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
