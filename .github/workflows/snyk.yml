@@ -33,6 +33,7 @@ jobs:
           npm run report:snyk-to-html -- -i snyk_results.json -o snyk_results.html -a
 
       - name: 📂 Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: snyk_results.html
