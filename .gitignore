@@ -66,5 +66,8 @@ deploy.env
 # System Files
 .DS_Store
 
+# Test
+.dccache
+
 # Reports
 snyk_results.*
