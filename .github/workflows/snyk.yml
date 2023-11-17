@@ -34,7 +34,7 @@ jobs:
       - name: 📄 Generate report
         if: ${{ success() || steps.snyk.outcome == 'failure' }}
         run: |
-          npm run report:snyk-to-html -- -i snyk_results.json -o snyk_results.html -a
+          npm run report:snyk-to-html -- -i snyk_results.json -o snyk_results.html
 
       - name: 📂 Upload artifacts
         if: always()
