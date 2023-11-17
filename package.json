@@ -73,7 +73,8 @@
     "sbom": "npm run sbom:json && npm run sbom:xml",
     "sbom:json": "cyclonedx-npm --omit=dev --output-format=JSON --output-file=bom.json",
     "sbom:xml": " cyclonedx-npm --omit=dev --output-format=XML  --output-file=bom.xml",
-    "scan:snyk": "snyk test"
+    "scan:snyk-open": "snyk test",
+    "scan:snyk-code": "snyk code test"
   },
   "jest": {
     "preset": "ts-jest",
